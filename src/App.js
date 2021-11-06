@@ -1,10 +1,10 @@
 import './App.css';
 import React, { useState } from 'react';
 
-function pattern(guess) {
+function pattern(guess) {  
   if(guess.length !== 3) return false;
-  if(guess[0] >= guess[1]) return false;
-  if(guess[1] >= guess[2]) return false;
+  if(parseInt(guess[0]) >= parseInt(guess[1])) return false;
+  if(parseInt(guess[1]) >= parseInt(guess[2])) return false;
   return true;
 }
 
