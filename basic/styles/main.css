@@ -1,0 +1,9 @@
+.demo-style {
+    background-color: lightgreen;
+    font-style: italic;
+}
+
+.demo-style-2 {
+    background-color: lightblue;
+    font-family: 'Courier New', Courier, monospace;
+}
