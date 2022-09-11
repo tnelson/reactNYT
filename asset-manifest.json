@@ -1,22 +1,13 @@
 {
   "files": {
-    "main.css": "/reactNYT/static/css/main.630f70b3.chunk.css",
-    "main.js": "/reactNYT/static/js/main.5498656b.chunk.js",
-    "main.js.map": "/reactNYT/static/js/main.5498656b.chunk.js.map",
-    "runtime-main.js": "/reactNYT/static/js/runtime-main.72d3e96b.js",
-    "runtime-main.js.map": "/reactNYT/static/js/runtime-main.72d3e96b.js.map",
-    "static/js/2.60c182e9.chunk.js": "/reactNYT/static/js/2.60c182e9.chunk.js",
-    "static/js/2.60c182e9.chunk.js.map": "/reactNYT/static/js/2.60c182e9.chunk.js.map",
-    "static/js/3.4f82bae4.chunk.js": "/reactNYT/static/js/3.4f82bae4.chunk.js",
-    "static/js/3.4f82bae4.chunk.js.map": "/reactNYT/static/js/3.4f82bae4.chunk.js.map",
+    "main.css": "/reactNYT/static/css/main.678ed882.css",
+    "main.js": "/reactNYT/static/js/main.558f4817.js",
     "index.html": "/reactNYT/index.html",
-    "static/css/main.630f70b3.chunk.css.map": "/reactNYT/static/css/main.630f70b3.chunk.css.map",
-    "static/js/2.60c182e9.chunk.js.LICENSE.txt": "/reactNYT/static/js/2.60c182e9.chunk.js.LICENSE.txt"
+    "main.678ed882.css.map": "/reactNYT/static/css/main.678ed882.css.map",
+    "main.558f4817.js.map": "/reactNYT/static/js/main.558f4817.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.72d3e96b.js",
-    "static/js/2.60c182e9.chunk.js",
-    "static/css/main.630f70b3.chunk.css",
-    "static/js/main.5498656b.chunk.js"
+    "static/css/main.678ed882.css",
+    "static/js/main.558f4817.js"
   ]
 }
