@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/reactNYT/static/css/main.678ed882.css",
-    "main.js": "/reactNYT/static/js/main.558f4817.js",
+    "main.js": "/reactNYT/static/js/main.8780af3c.js",
     "index.html": "/reactNYT/index.html",
     "main.678ed882.css.map": "/reactNYT/static/css/main.678ed882.css.map",
-    "main.558f4817.js.map": "/reactNYT/static/js/main.558f4817.js.map"
+    "main.8780af3c.js.map": "/reactNYT/static/js/main.8780af3c.js.map"
   },
   "entrypoints": [
     "static/css/main.678ed882.css",
-    "static/js/main.558f4817.js"
+    "static/js/main.8780af3c.js"
   ]
 }
