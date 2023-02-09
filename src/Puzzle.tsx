@@ -2,9 +2,6 @@ import './Puzzle.css';
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { ref, push } from "firebase/database";
 import { database, session_id } from './firebase_helper';
-/*
-  Note well: there is a bug in this code. We'll try to find it in class.
-*/
 
 export const TEXT_try_button_accessible_name = 'try your sequence'
 export const TEXT_number_1_accessible_name = 'first number in sequence'
@@ -12,10 +9,19 @@ export const TEXT_number_2_accessible_name = 'second number in sequence'
 export const TEXT_number_3_accessible_name = 'third number in sequence'
 export const TEXT_try_button_text =  'Try it!'
 
-export function pattern(guess: string[]): boolean {  
+/**
+ * Tells whether or not a guess was correct.
+ * @param {string[]} guess A guess of three integers in string form.
+ */
+function pattern(guess: string[]): boolean {
   if(guess.length !== 3) return false;
-  if(guess[0] >= guess[1]) return false;
-  if(guess[1] >= guess[2]) return false;
+  if(guess[0].length < 1 || 
+     guess[1].length < 1 ||
+     guess[2].length < 1) return false;
+  // Comparing strings with >= is allowed in JS/TS, so unless we want
+  // to say that '1', '22', '333' is a bad sequence, we need to convert.
+  if(parseInt(guess[0]) >= parseInt(guess[1])) return false;
+  if(parseInt(guess[1]) >= parseInt(guess[2])) return false;
   return true;
 }
 
