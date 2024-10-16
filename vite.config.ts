@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(() => {
   return {
-    base: '/reactNYT/',
+    base: '/reactNYT/', // NOT IN THE LIVECODE REPO EXAMPLE
     build: {
       outDir: 'build',
     },
