@@ -12,6 +12,6 @@ export default defineConfig(() => {
     // Development server port (same as gearup)
     server: {
       port: 8000,
-    },
+    }
   };
 });

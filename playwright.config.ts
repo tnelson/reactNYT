@@ -84,7 +84,7 @@ export default defineConfig({
      just using the dev server should be easier.
   */
   webServer: {
-    command: 'npm start',
+    command: 'cross-env VITE_MOCK_VALUE=true npm start',
     url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
   },
