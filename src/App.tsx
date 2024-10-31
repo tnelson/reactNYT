@@ -38,11 +38,12 @@ function App() {
       </p>
       <p> 
         This app logs all sequences entered, along with the result, a timestamp, 
-        and a unique session identifier created when the page is loaded. No other data is logged. 
+        and a unique session identifier created when the page is loaded. 
+        No other data is logged (unless you are logged in; see below). 
       </p>
       <p>
-        Optionally, you may log into this puzzle. If you do so, your login is <strong>not</strong> saved in the logs.
-        However, because logging in and out changes the page that your browser is on, your progress in the puzzle will be deleted when your login status changes.
+        Optionally, you may log into this puzzle. If you do so, <strong>your login will be saved in the logs.</strong> This is so the project can serve as an example for basic authentication with Clerk.
+        Because logging in and out changes the page that your browser is on, your progress in the puzzle will be deleted when your login status changes.
       </p>
       <SignedOut>
         <Puzzle />

@@ -2,6 +2,8 @@ import './Puzzle.css';
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { ref, push } from "firebase/database";
 import { database, session_id } from './firebase_helper';
+import { useUser } from "@clerk/clerk-react";
+import { UserResource } from "@clerk/types";
 
 export const TEXT_try_button_accessible_name = 'try your sequence'
 export const TEXT_number_1_accessible_name = 'first number in sequence'
@@ -64,6 +66,11 @@ function NewRound({addGuess, setNotification}: NewRoundProps) {
   const [value0, setValue0] = useState('');
   const [value1, setValue1] = useState('');
   const [value2, setValue2] = useState('');
+
+  // Clerk doesn't export the UseUserReturn type, but TypeScript will infer it here, so we can
+  // use its fields in the event-handler below. It _does_ export the actual user data's type.
+  const user = useUser();
+  
   return (
     <div className="new-round">
       <div className="guess-round-current">  
@@ -82,7 +89,8 @@ function NewRound({addGuess, setNotification}: NewRoundProps) {
               setValue1('')
               setValue2('')
               setNotification('')
-              logSequence([value0, value1, value2])
+              logSequence([value0, value1, value2], 
+                          (user.isLoaded && user.isSignedIn) ? user.user : undefined)
             } else {
               setNotification('Please provide a full 3-number sequence.')
             }
@@ -95,8 +103,12 @@ function NewRound({addGuess, setNotification}: NewRoundProps) {
   );  
 }
 
-function logSequence(guess: string[]) {
+function logSequence(guess: string[], userResource: UserResource | undefined) {
+  const user_id = userResource?.username ? userResource?.username : 
+                                           userResource?.primaryEmailAddress?.emailAddress
+  
   const presumed_result: boolean = pattern(guess);
+
   const log_entry = {
     // Log the sequence that the user picked
     //  (Purpose: detecting patterns of sequences, results before stopping)
@@ -111,7 +123,13 @@ function logSequence(guess: string[]) {
     //  (Purpose: distinguishing between different chains of sequences. This is
     //   important because we want to check whether the NYT puzzle's hypothesis 
     //   about when users stop giving sequences holds here, too.)
-    session: session_id
+    session: session_id,
+
+    // Log the user name or user's email, if they are logged in.
+    // Note: when pushing an update, if you don't see it take effect, check the console. 
+    // Firebase will give an error for some types, e.g., if you accidentally try to 
+    // store a function.
+    user_id: user_id
   };  
 
   // https://firebase.google.com/docs/reference/js/database.md#database_package
