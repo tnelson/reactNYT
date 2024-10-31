@@ -128,8 +128,9 @@ function logSequence(guess: string[], userResource: UserResource | undefined) {
     // Log the user name or user's email, if they are logged in.
     // Note: when pushing an update, if you don't see it take effect, check the console. 
     // Firebase will give an error for some types, e.g., if you accidentally try to 
-    // store a function.
-    user_id: user_id
+    // store a function or `undefined`. Use `null` instead to represent an empty field.
+    // I'm using the "nullish coalescing operator" here to make that easy:
+    user_id: user_id ?? null
   };  
 
   // https://firebase.google.com/docs/reference/js/database.md#database_package
