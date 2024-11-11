@@ -2,21 +2,19 @@
 
 To experiment with authentication "in anger", I added Clerk authentication to this app in October, 2024. This markdown file contains my notes on the process: what I did, problems I encountered, and so on. 
 
-## Initial Clerk Integration
+## Step 1: Initial Clerk Integration
 
 I logged into Clerk using my Brown email, and created a new (free tier) app name called `reactNYT`. Clicking on the "React" tab gave me a series of steps to follow. 
 
-**Problem**: the workflow shown starts a _new_ application, and I already have an application! So how do I integrate Clerk without recreating my app and copying over everything? Let's just start trying and read docs as we go. 
+The workflow shown in the documentation starts a _new_ application, and I already have an application! So how do I integrate Clerk without recreating my app and copying over everything? Let's just improvise around their guide and read docs as we go. To start, I ran: `npm install @clerk/clerk-react`. Then I added a `ClerkProvider` to the `App.tsx` component, a login button for `SignedOut` and wrapped the `Puzzle` component in `SignedIn`. These required some imports, but matched their guide almost exactly. 
 
-I ran: `npm install @clerk/clerk-react`. Then I added a `ClerkProvider` to the `App.tsx` component, a login button for `SignedOut` and wrapped the `Puzzle` component in `SignedIn`. These required some imports. 
+Now I need to put my publishable key into the provider as a prop. The error message I get without one (via the console) says to get one at: `https://dashboard.clerk.com/apps/`. That page says that the publishable key is meant to be included in the front-end code, and does not need to be kept secret. 
 
-Now I need to put my publishable key into the provider as a prop. The error message I get without one (via the console) says to get on at: `https://dashboard.clerk.com/apps/`. That page says that the publishable key is meant to be included in the front-end code, and does not need to be kept secret. 
+Rather than use an envfile, I just added a `public_keys.ts` source file, exporting the key, and added it to Git. Now I have a login button showing up. Clicking it takes me to a login page. I used my Brown email address to log in. 
 
-Rather than use an envfile, I just added a `public_keys.ts` source file, exporting the key, and added it to Git. Now I have a login button showing up instead of the puzzle. Clicking it takes me to a login page. I used my Brown email address to log in. 
+**Potential problem:** Safari gave me a big error in the console about possible XSS attacks at first, but Firefox is OK.
 
-**Potential problem:** Safari gave me a big error in the console about possible XSS attacks. **TODO**
-
-**Potential problem:** This is a dev key; Clerk says: `[Warning] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview`. See next sections.
+**Potential problem:** This is a "dev key"; Clerk says: `[Warning] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview`. But Clerk should be usable locally, which serves the purpose of the example.
 
 **Problem:** After login, I got a message: 
 
@@ -26,7 +24,7 @@ Weird! So I'm being redirected to a different URL than I expected. There must be
 
 Overall, getting this working with a dev server wasn't hard at all. 
 
-## Testing with Playwright
+## Step 2: Testing with Playwright
 
 Clerk has bot detection to prevent bots from probing its users' authentication. Unfortunately, this means that testing is complicated: Playwright is very likely to trigger this bot detection, because Playwright _is_ a bot! 
 
@@ -48,7 +46,7 @@ E2E_CLERK_USER_USERNAME=username
 E2E_CLERK_USER_PASSWORD=password
 ```
 
-**Question**: Do we really need the username/password in the envfile, or can we script the login?
+**Question**: Do we really need the username/password in the envfile, or can we script the login? I think we could, but let's follow their guide here.
 
 I followed the instructions to augment the test script: calling `clerkSetup()` before everything, and `await setupClerkTestingToken({ page })` per test. But I still got this error: 
 
@@ -73,7 +71,7 @@ and made it a dependency for the others, e.g.,
 },
 ```
 
-Found the problem: I didn't await Clerk loading:
+I also didn't `await` Clerk loading:
 
 `await clerk.loaded({ page })`
 
@@ -90,20 +88,17 @@ Error: expect(locator).toBeVisible()
       - waiting for getByText(/I'm thinking of a function/i)
 ```
 
-Embarrassingly, I had forgotten to _await_ the locator's visibility. It should have been:
+Embarrassingly, I had forgotten to `await` the locator's visibility. It should have been:
 
 ```
 await expect(instructionElement).toBeVisible();
 ```
 
-Now they all pass. Let's add some actual logging in, though. I'll make a user in the Clerk dashboard specifically for testing. This won't go through Google, but only to Clerk. I'll then put their username and password in the envfile.
-
-
-
-
-
-
+Now they all pass. Let's add some actual logging in, though. I'll make a user in the Clerk dashboard specifically for testing. This won't go through Google, but only to Clerk. I'll then put their username and password in the envfile. 
 
 ## Deployment to Github Pages
 
-**TODO**
+I stopped the Clerk integration here due to time limitations, which means I can't actually deploy the version with authentication for next semester's class. But that's a problem for winter break.
+
+[Clerk's guide](https://clerk.com/docs/deployments/overview) will be helpful. But without a production instance, Clerk won't load in the deployed app.
+
