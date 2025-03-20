@@ -37,7 +37,11 @@ test('login/logout', async ({ page }) => {
   })
 
   // Partial match by default
-  const loginText = page.getByText('You are logged in')
+  // But beware: there are 2 possible matches here: one from the header text, and one from 
+  //   the actual logged-in text. So we need to be more specific.
+  // const loginText = page.getByText('You are logged in')
+  // Look for this string inside a "Login Status" aria-labeled component
+  const loginText = page.getByLabel('Login Status').getByText('You are logged in')
   await expect(loginText).toBeVisible();
   
   await clerk.signOut({ page })

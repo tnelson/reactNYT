@@ -47,12 +47,12 @@ function App() {
       </p>
       <SignedOut>
         <Puzzle />
-        <SignInButton />
+        <div aria-label='Login Status'>You are logged out. <SignInButton /></div>
       </SignedOut>
       <SignedIn>
         <Puzzle />
         <hr/>
-        <div>You are logged in! <UserButton /> <SignOutButton /></div>
+        <div aria-label='Login Status'>You are logged in! <UserButton /> <SignOutButton /></div>
       </SignedIn>      
     </div>
     {`App version: ${__APP_VERSION}; useMock=${useMock}`}
