@@ -16,6 +16,8 @@ Rather than use an envfile, I just added a `public_keys.ts` source file, exporti
 
 **Potential problem:** This is a "dev key"; Clerk says: `[Warning] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview`. But Clerk should be usable locally, which serves the purpose of the example.
 
+0320 doesn't require _production_ deployment. 
+
 **Problem:** After login, I got a message: 
 
 > The server is configured with a public base URL of /reactNYT/ - did you mean to visit /reactNYT/reactNYT?__clerk_db_jwt=dvb_2nX8DemLH9P8EDeahWyWS6POoIv instead?

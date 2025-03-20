@@ -6,8 +6,6 @@
   "type": "module",
   "dependencies": {
     "@clerk/clerk-react": "^5.25.0",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
     "firebase": "^11.5.0",
     "gh-pages": "^6.3.0",
     "playwright": "^1.51.1",
@@ -48,6 +46,8 @@
     "@clerk/testing": "^1.4.28",
     "@playwright/test": "^1.51.1",
     "@types/jest": "^29.5.14",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
     "cross-env": "^7.0.3",
     "eslint": "^9.22.0",

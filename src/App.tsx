@@ -55,7 +55,7 @@ function App() {
         <div>You are logged in! <UserButton /> <SignOutButton /></div>
       </SignedIn>      
     </div>
-    {`useMock=${useMock}`}
+    {`App version: ${__APP_VERSION}; useMock=${useMock}`}
     </ClerkProvider>
   );
 }
