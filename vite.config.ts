@@ -1,7 +1,7 @@
 // This configuration file gives Vite info on running this React app.
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import {version} from "./package.json"
+import pkg from "./package.json" with { type: 'json' }
 
 export default defineConfig(() => {
   return {
@@ -10,7 +10,7 @@ export default defineConfig(() => {
       outDir: 'build',
     },
     define: {
-      "__APP_VERSION": JSON.stringify(version)
+      "__APP_VERSION": JSON.stringify(pkg.version)
     },
     plugins: [react()],
     // Development server port (same as gearup)

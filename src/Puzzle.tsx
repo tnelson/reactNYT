@@ -2,8 +2,9 @@ import './Puzzle.css';
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { ref, push } from "firebase/database";
 import { database, session_id } from './firebase_helper';
-import { useUser } from "@clerk/clerk-react";
-import { UserResource } from "@clerk/types";
+import { GoogleUser } from './google_auth';
+
+/* Define constants to avoid duplication and help match test expectations to reality */
 
 export const TEXT_try_button_accessible_name = 'try your sequence'
 export const TEXT_number_1_accessible_name = 'first number in sequence'
@@ -57,20 +58,17 @@ function OldRound( {guess}: {guess: string[]}) {
 }
 
 // Remember that the parameter names don't necessarily need to overlap.
-interface NewRoundProps {  
+interface NewRoundProps {
   addGuess: (guess: string[]) => any,
-  setNotification: Dispatch<SetStateAction<string>>
+  setNotification: Dispatch<SetStateAction<string>>,
+  user: GoogleUser | undefined
 }
 
-function NewRound({addGuess, setNotification}: NewRoundProps) {
+function NewRound({addGuess, setNotification, user}: NewRoundProps) {
   const [value0, setValue0] = useState('');
   const [value1, setValue1] = useState('');
   const [value2, setValue2] = useState('');
 
-  // Clerk doesn't export the UseUserReturn type, but TypeScript will infer it here, so we can
-  // use its fields in the event-handler below. It _does_ export the actual user data's type.
-  const user = useUser();
-  
   return (
     <div className="new-round">
       <div className="guess-round-current">  
@@ -89,8 +87,7 @@ function NewRound({addGuess, setNotification}: NewRoundProps) {
               setValue1('')
               setValue2('')
               setNotification('')
-              logSequence([value0, value1, value2], 
-                          (user.isLoaded && user.isSignedIn) ? user.user : undefined)
+              logSequence([value0, value1, value2], user)
             } else {
               setNotification('Please provide a full 3-number sequence.')
             }
@@ -103,10 +100,9 @@ function NewRound({addGuess, setNotification}: NewRoundProps) {
   );  
 }
 
-function logSequence(guess: string[], userResource: UserResource | undefined) {
-  const user_id = userResource?.username ? userResource?.username : 
-                                           userResource?.primaryEmailAddress?.emailAddress
-  
+function logSequence(guess: string[], user: GoogleUser | undefined) {
+  const user_id = user?.name ? user?.name : user?.email
+
   const presumed_result: boolean = pattern(guess);
 
   const log_entry = {
@@ -138,6 +134,7 @@ function logSequence(guess: string[], userResource: UserResource | undefined) {
   //  This is the most common pattern for adding data to a collection of items.""
   //   "If you don't pass a value, nothing is written to the database and the child remains 
   //    empty (but you can use the Reference elsewhere)."
+  
   const parent = ref(database, 'sequences/')
   console.log(`Starting update to new child of ${parent}`)
   push(parent, log_entry).then(  
@@ -147,25 +144,26 @@ function logSequence(guess: string[], userResource: UserResource | undefined) {
     )
 }
 
-export default function Puzzle() {
+export default function Puzzle({user}: {user: GoogleUser | undefined}) {
   // NOTE: useState runs before the initial render. However, in development in strict
   // mode, components will be rendered twice (React does this to try and discover issues).
   const [guesses, setGuesses] = useState<string[][]>([]);
-  const [notification, setNotification] = useState('');    
-  
+  const [notification, setNotification] = useState('');
+
   return (
-    <div className="App">   
-      { guesses.map( (guess,guessNumber) => 
-        <OldRound           
+    <div className="App">
+      { guesses.map( (guess,guessNumber) =>
+        <OldRound
           guess={guess}
           key={guessNumber} />)}
-      <NewRound                  
+      <NewRound
         setNotification={setNotification}
-        addGuess={(guess: string[]) => {          
-          const newGuesses = guesses.slice(); 
+        user={user}
+        addGuess={(guess: string[]) => {
+          const newGuesses = guesses.slice();
           newGuesses.push(guess)
           setGuesses(newGuesses) }} />
-      {notification}   
+      {notification}
     </div>
   );
 }

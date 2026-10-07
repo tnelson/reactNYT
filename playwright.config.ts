@@ -33,16 +33,10 @@ export default defineConfig({
   /* Configure projects for major browsers 
      For expediency as a demo, we'll only test on one browser. */
   projects: [
-    /* This isn't a browser, it's the setup for Clerk. */
-    {
-      name: 'setup Clerk',
-      testMatch: /global\.setup\.ts/,
-    },
     /* We'll test on Chromium, but not the others. */
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      dependencies: ['setup Clerk'],
     },
 
     // {
@@ -85,12 +79,9 @@ export default defineConfig({
 
      In practice, we'd build and run a preview of the production version, but for our purposes
      just using the dev server should be easier.
-
-     I'm using cross-env (see the README) to pass in an environment variable thst's then 
-     visible to Vite, which the react components then use to mock vs. not mock.
   */
   webServer: {
-    command: 'cross-env VITE_MOCK_VALUE=true npm start',
+    command: 'npm start',
     url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
   },
